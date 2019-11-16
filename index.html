@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="fr" ng-app="demoApp">
+
+	<head>
+		<meta charset="utf-8" />
+		<title> Todo List </title>
+	    <link rel="stylesheet" href="css/style.css">
+		<script src="js/vendor/angular.js"></script>
+		<script src="js/todoList.js"></script>
+	</head>
+	
+	<body>
+		<header>
+			<h1> Todo List </h1>
+		</header>
+
+		<section ng-controller="todoCtrl">
+
+			<!-- BARRE LATERALE GAUCHE : Début -->
+			<div id="barre_laterale">
+				<article>
+					<ul id="todo-list">
+						<!-- Affichage des titres de la todo list -->
+						<li ng-repeat="todo in todos track by $index">
+							<div class="view">
+								<input class="mark" type="checkbox"/>
+								<span><a href="" ng-class="{ 'active' : showTodo == $index}" ng-click="showTodo($index)">{{todo.title}}</a></span>
+								<span class="close" ng-click="removeTodo($index)"> x </span>
+							</div>
+						</li>
+					</ul>	
+					<!-- Formulaire sublist -->
+					<form id="todo-form" ng-submit="addTodo(newTodo)">
+						<input id="new-todo" placeholder="Ajouter une nouvelle liste" ng-model="newTodo" name="newTodo" />
+					</form>
+				</article>
+			</div>
+			<!-- BARRE LATERALE GAUCHE : Fin -->
+
+			<div id="milieu" ng-show="todo">
+				<article>
+					<ul id="todo-list">
+						<!-- Affiche du contenu de la todoList -->
+						<li ng-repeat="(key, value) in todo">
+							<div class="view">
+								<input class="mark" type="checkbox"/>
+								<span> {{value.title}}</span>
+								<span class="close" ng-click="editTodo($index,value.title)"> Edit </span>
+								<ul id="sub-todo">
+									<li ng-repeat="(key, value) in value.subTodo" >
+										<input class="mark" type="checkbox"/>
+										<span>{{ value.title }}</span>
+										<span class="close" ng-click="removeTodo(value.subTodo)"> x </span>
+										<label class="btn btn-info" ng-click="orderReverse = !orderReverse"> {{ orderReverse && 'Close' || 'Add'}} </label>
+
+										<!-- Formulaire sublist -->
+										<form ng-show="orderReverse" id="subtodo-form" ng-submit="addSubElement()">
+											<input id="new-sub-todo" placeholder="Ajouter un sous élément... " ng-model="newSubTodos" name="newSubTodos" /> 
+										</form>
+									</li>
+								</ul>
+								
+							</div>
+							<!-- Formulaire sublist -->
+							<form id="todo-form" ng-submit="addItem(newItem,key)">
+								<input id="new-todo" placeholder="Ajouter un nouvel item" ng-model="newItem" name="newItem" />
+							</form>
+						</li>
+					</ul>
+				</article>
+			</div>
+			
+		</section>
+	</body>
+	
+</html>
